@@ -6,7 +6,25 @@ const provider = ganache.provider();
 const web3 = new Web3(provider);
 const { interface, bytecode } = require('../compile');
 
-const INITIAL_STRING = 'Hi There!';
+let accounts;
+
+beforeEach( async () => {
+	//get th elist of all accounts
+	accounts = await web3.eth.getAccounts();
+
+	//make use of one of the accounts
+	lottery = await new web3.eth.Contract(JSON.parse(interface))
+	.deploy({data: bytecode})
+	.send({from: accounts[0], gas: '1000000'});
+});
+
+describe('Lottery', () => {
+	it('check deploy contract', () => {
+		assert.ok(lottery.options.address);
+	});
+
+	
+});
 
 /*class Car {
 	park() {
@@ -35,7 +53,7 @@ describe('Car', () => {
 	})
 });
 */
-let accounts;
+/*let accounts;
 let inbox;
 
 beforeEach(async () => {
@@ -67,3 +85,6 @@ describe('Inbox', () => {
 		assert.equal(message, 'Bye see you');
 	});
 });
+
+*/
+
